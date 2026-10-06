@@ -9,14 +9,16 @@ window.HNY = window.HNY || {};
 (function (HNY) {
   'use strict';
 
-  const { BUILDINGS, CATEGORIES, SEED } = HNY.DATA;
+  const { BUILDINGS, CATEGORIES, SEED, ALIASES = {} } = HNY.DATA;
   const KEY = 'hny_items_v4';
   const CLAIMS_KEY = 'hny_claims_v1';
   const MAP_KEY = 'hny_map_version';
-  const MAP_VERSION = 2;
+  const MAP_VERSION = 3;
   const HOUR = 3600 * 1000;
 
   const byBuilding = new Map(BUILDINGS.map((b) => [b.id, b]));
+  // Reports saved with an older map's building ids still resolve to a building
+  Object.entries(ALIASES).forEach(([old, id]) => { if (!byBuilding.has(old)) byBuilding.set(old, byBuilding.get(id)); });
   const byCategory = new Map(CATEGORIES.map((c) => [c.id, c]));
   const listeners = new Set();
   let memory = null; // used when localStorage isn't available
@@ -30,14 +32,12 @@ window.HNY = window.HNY || {};
     catch { memory = memory || {}; memory[key] = value; }
   }
 
-  /* Point inside a building for a new pin: its roof centre, nudged so pins don't stack */
+  /* Point inside a building for a new pin: its label anchor, nudged so pins don't stack */
   function buildingPoint(b, seed = 0) {
-    const cx = b.shape === 'circle' ? b.cx : b.x + b.w / 2;
-    const cy = b.shape === 'circle' ? b.cy - 4 : b.y + b.h * 0.42;
-    const spread = b.shape === 'circle' ? b.r * 0.45 : Math.min(b.w, b.h) * 0.32;
+    const spread = Math.min(b.box.w, b.box.h) * 0.22;
     const a = (seed * 137.5) * Math.PI / 180;
     const k = seed === 0 ? 0 : 1;
-    return { x: Math.round(cx + Math.cos(a) * spread * k), y: Math.round(cy + Math.sin(a) * spread * k) };
+    return { x: Math.round(b.ax + Math.cos(a) * spread * k), y: Math.round(b.ay - 30 + Math.sin(a) * spread * k) };
   }
 
   function makeRef() {
@@ -104,8 +104,8 @@ window.HNY = window.HNY || {};
     items = items.map((it) => {
       const b = byBuilding.get(it.bldg);
       if (!b) return it;
-      per[it.bldg] = (per[it.bldg] || 0) + 1;
-      return { ...it, ...buildingPoint(b, per[it.bldg] - 1) };
+      per[b.id] = (per[b.id] || 0) + 1;
+      return { ...it, bldg: b.id, ...buildingPoint(b, per[b.id] - 1) };
     });
     write(KEY, items);
     write(MAP_KEY, MAP_VERSION);

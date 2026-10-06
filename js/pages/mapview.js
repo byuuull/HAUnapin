@@ -62,7 +62,7 @@
       : 'Pins show where an item was reported. Building positions are schematic, so use the room notes for the exact spot.';
     map.hidePopup();
     if (view === 'street') {
-      const at = VPS.findIndex((v) => v.bldg === state.bldg);
+      const at = VPS.findIndex((v) => covers(v, state.bldg));
       if (at >= 0) state.vp = at;
       goViewpoint(state.vp, { focus });
     } else {
@@ -70,6 +70,7 @@
       if (focus) $('#campusMap .map-svg').focus();
     }
   }
+  function covers(v, id) { return !!id && (v.bldg === id || (v.also || []).includes(id)); }
   function goViewpoint(i, { focus = false } = {}) {
     state.vp = (i + VPS.length) % VPS.length;
     const vp = VPS[state.vp];
@@ -80,11 +81,11 @@
   }
   function renderStreet() {
     const vp = VPS[state.vp];
-    const items = visibleItems().filter((it) => it.bldg === vp.bldg);
+    const items = visibleItems().filter((it) => covers(vp, it.bldg));
     const spots = vp.hotspots;
     $('#street').innerHTML = `
-      <figure class="street-photo"><img src="${vp.photo}" alt="${esc(vp.title)}: ${esc(vp.sub)}"></figure>
-      <p class="street-loc"><span class="dot" aria-hidden="true"></span>Current location: <b>${esc(vp.title)}</b></p>
+      <figure class="street-photo"><img src="${vp.photo}" alt="Eye-level photo of ${esc(vp.title)}" decoding="async"></figure>
+      <p class="street-loc"><span class="dot" aria-hidden="true"></span>Current location: <b>${esc(vp.title)}</b><span class="street-count">${state.vp + 1} / ${VPS.length}</span></p>
       ${items.map((it, k) => { const [x, y] = spots[k % spots.length]; const off = Math.floor(k / spots.length) * 4; return `<button type="button" class="street-pin ${it.status === 'lost' ? 'is-lost' : 'is-found'}${it.id === state.activeId ? ' is-active' : ''}" style="left:${x + off}%;top:${y - off}%" data-street-item="${esc(it.id)}" aria-label="${esc(ui.statusWord(it))} item: ${esc(it.title)}">${icon('pin')}</button>`; }).join('')}
       ${items.length ? '' : `<p class="street-empty">${icon('info')}No open reports in ${esc(ui.bShort(vp.bldg))} with these filters.</p>`}
       <button type="button" class="street-nav prev" data-vp-step="-1" aria-label="Previous location">${icon('chevronLeft')}</button>
@@ -92,9 +93,23 @@
       <div class="street-bottom">
         <div class="street-chips" role="group" aria-label="Street View locations">${VPS.map((v, k) => `<button type="button" data-vp="${k}" aria-pressed="${k === state.vp}">${esc(v.title)}</button>`).join('')}</div>
       </div>
-      <button type="button" class="street-mini" data-back-map aria-label="Back to the map at ${esc(ui.bShort(vp.bldg))}"><img src="images/campus/map-3d.jpg" alt=""><span>${esc(ui.bShort(vp.bldg))}</span></button>
+      <button type="button" class="street-mini" data-back-map aria-label="Back to the map at ${esc(ui.bShort(vp.bldg))}"><img src="images/campus/map-mini.png" alt="" style="${miniPos(vp.bldg)}"><i class="street-mini-dot" aria-hidden="true"></i><span>${esc(ui.bShort(vp.bldg))}</span></button>
       <p class="street-caption">${esc(vp.sub)}</p>
       <div class="street-popup" id="streetPopup" hidden></div>`;
+    const chip = $(`.street-chips [data-vp="${state.vp}"]`);
+    if (chip) { const row = chip.parentElement; row.scrollLeft = chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2; }
+    const img = $('.street-photo img');
+    if (img) { if (img.complete) img.classList.add('is-in'); else img.addEventListener('load', () => img.classList.add('is-in'), { once: true }); }
+    [state.vp - 1, state.vp + 1].forEach((k) => { const n = VPS[(k + VPS.length) % VPS.length]; const pre = new Image(); pre.src = n.photo; });
+  }
+  /* Mini map: the campus map zoomed in on the current building */
+  function miniPos(id) {
+    const b = HNY.DATA.BUILDINGS.find((x) => x.id === id);
+    const W = HNY.DATA.CAMPUS.width; const H = HNY.DATA.CAMPUS.height;
+    if (!b) return '';
+    const scale = 3; // the image is 3x the circle width
+    const fx = b.ax / W; const fy = b.ay / H;
+    return `width:${scale * 100}%;height:auto;max-width:none;position:absolute;left:${50 - fx * scale * 100}%;top:calc(50% - ${fy * scale * (H / W) * 100}% * 1);`;
   }
   function openStreetItem(id, btn) {
     const it = all.find((i) => i.id === id);

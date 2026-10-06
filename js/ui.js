@@ -457,5 +457,51 @@ window.HNY = window.HNY || {};
     params, setParams, trapFocus, overlay, initChrome, modal, sheet, toast, copyText, compressImage, prefersReducedMotion,
   };
 
+  /* Header shadow once the page scrolls; sections fade up as they come into view */
+  function initPolish() {
+    const header = $('.site-header');
+    if (header) {
+      const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+    const pages = ['home', 'how', 'about', 'stories', 'safety', 'legal', 'help'];
+    if (!pages.includes(document.body.dataset.page) || !('IntersectionObserver' in window) || prefersReducedMotion()) return;
+    const sections = $$('main section').slice(1); // the first section (hero) is already on screen
+    const targets = [];
+    sections.forEach((sec) => {
+      const inner = sec.querySelector('.container') || sec;
+      [...inner.children].forEach((el, i) => { el.classList.add('reveal'); el.style.setProperty('--d', `${Math.min(i, 4) * 0.08}s`); targets.push(el); });
+    });
+    if (!targets.length) return;
+    document.documentElement.classList.add('js-reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    targets.forEach((el) => io.observe(el));
+    // Safety net: never leave content hidden (e.g. jumping straight to an anchor)
+    setTimeout(() => targets.forEach((el) => el.classList.add('is-in')), 4000);
+  }
+
+  /* Page transitions: fade the page out before following an internal link */
+  function initTransitions() {
+    if (prefersReducedMotion() || ('onpagereveal' in window)) return; // native view transitions handle it
+    document.addEventListener('click', (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest('a[href]');
+      if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+      const url = new URL(a.href, location.href);
+      if (url.origin !== location.origin || !/\.html$|\/$/.test(url.pathname)) return;
+      if (url.pathname === location.pathname && url.search === location.search) return; // same page / anchors
+      e.preventDefault();
+      document.documentElement.classList.add('is-leaving');
+      setTimeout(() => { location.href = a.href; }, 200);
+    });
+    // Coming back with the Back button: undo the fade
+    window.addEventListener('pageshow', () => document.documentElement.classList.remove('is-leaving'));
+  }
+
   document.addEventListener('DOMContentLoaded', initChrome);
+  document.addEventListener('DOMContentLoaded', initPolish);
+  document.addEventListener('DOMContentLoaded', initTransitions);
 }(window.HNY));

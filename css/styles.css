@@ -1521,3 +1521,275 @@ input, textarea, select, [contenteditable="true"] { caret-color: auto; }
 .already-in .cluster { margin-top: var(--s-2); }
 .last-login { font-size: var(--fs-xs); color: var(--muted); margin-top: var(--s-1); }
 .btn[aria-busy="true"] { opacity: .7; cursor: progress; }
+
+/* ---------- Campus map v3: the team's 21-building map ---------- */
+.map-shell { background: #E4EBDA; }
+.map-ground { fill: #E4EBDA; }
+.map-campus { fill: #EFEBE3; stroke: #DCD5C8; stroke-width: 3; }
+.map-lawn { fill: #C3D9A6; stroke: #B1CC92; stroke-width: 2; }
+.map-drive-edge, .map-drive-edge-c { fill: none; stroke: #DCD5C8; stroke-width: 70; stroke-linecap: round; stroke-linejoin: round; }
+.map-drive-edge-c { fill: #DCD5C8; stroke: none; }
+.map-drive { fill: none; stroke: #444A53; stroke-width: 54; stroke-linecap: round; stroke-linejoin: round; }
+.map-asphalt { fill: #444A53; }
+.map-drive-line { fill: none; stroke: #FFFFFF; stroke-width: 3; stroke-dasharray: 16 14; opacity: .85; }
+.map-plaza { fill: #F6F2EA; stroke: #DCD5C8; stroke-width: 4; }
+.map-fountain { fill: #7CC3DD; stroke: #FFFFFF; stroke-width: 5; }
+.map-fountain-jet { fill: #C7E9F4; }
+.map-canopy { fill: #C9673A; }
+.map-canopy-shadow { fill: rgba(59, 42, 32, .16); }
+.canopy-ridge { stroke: #E0875A; stroke-width: 3; }
+.canopy-seam { stroke: #9E4A26; stroke-width: 3; }
+.map-tree { fill: #7EAD5A; stroke: #6A9A49; stroke-width: 2; }
+.map-tree.alt { fill: #6E9F4B; stroke: #5E8C3E; }
+.map-tree-shadow { fill: rgba(40, 60, 30, .14); }
+.map-fence { fill: none; stroke: #8C7B66; stroke-width: 7; stroke-dasharray: 18 7; }
+.map-post { fill: #8C7B66; stroke: #FFFFFF; stroke-width: 2; }
+.map-gate-label { font: 800 22px var(--font-body); fill: var(--burgundy); letter-spacing: .08em; text-transform: uppercase; paint-order: stroke; stroke: #E4EBDA; stroke-width: 6px; stroke-linejoin: round; }
+.landmark-label { font: 800 22px var(--font-body); fill: #5E7A4A; letter-spacing: .16em; text-transform: uppercase; text-anchor: middle; dominant-baseline: middle; paint-order: stroke; stroke: rgba(255,255,255,.75); stroke-width: 5px; stroke-linejoin: round; pointer-events: none; }
+
+.bldg .shadow { fill: rgba(59, 42, 32, .17); }
+.bldg .roof { fill: #FFFFFF; stroke: #CFC6B6; stroke-width: 3; stroke-linejoin: round; transition: fill .2s var(--ease), stroke .2s var(--ease); }
+.bldg.tone-red .roof { fill: #E4574B; stroke: #B5392F; }
+.bldg.tone-brick .roof { fill: #E05A4E; stroke: #B5392F; }
+.bldg.tone-yellow .roof { fill: #F7D056; stroke: #D9AE2A; }
+.bldg.tone-navy .roof { fill: #2459B3; stroke: #183E86; }
+.bldg.tone-cream .roof { fill: #FBF0CF; stroke: #E2CF96; }
+.bldg.tone-gray .roof { fill: #A9ADB2; stroke: #8C9096; }
+.bldg.tone-court .roof { fill: #F2F0EC; }
+.bldg.tone-u .roof { stroke: none; }
+.roof-detail { fill: #F3E2B1; pointer-events: none; }
+.roof-ring { fill: none; stroke: #E6DFD2; stroke-width: 4; pointer-events: none; }
+.roof-line { stroke: #DDD8CF; stroke-width: 3; pointer-events: none; }
+.chapel-cross { stroke: #B5B5B2; stroke-width: 4; stroke-linecap: round; pointer-events: none; }
+.bldg-badge { pointer-events: none; }
+.bldg-badge circle { fill: var(--burgundy); stroke: var(--gold); stroke-width: 4; }
+.bldg-badge text { font: 800 24px var(--font-body); fill: #FFFFFF; text-anchor: middle; dominant-baseline: central; }
+.bldg.tone-red .bldg-badge circle, .bldg.tone-brick .bldg-badge circle, .bldg.tone-navy .bldg-badge circle { fill: #FFFFFF; }
+.bldg.tone-red .bldg-badge text, .bldg.tone-brick .bldg-badge text, .bldg.tone-navy .bldg-badge text { fill: var(--burgundy); }
+.bldg-label { font: 800 22px var(--font-body); fill: #3B2F31; letter-spacing: .04em; text-anchor: middle; dominant-baseline: middle; paint-order: stroke; stroke: rgba(255,255,255,.85); stroke-width: 5px; stroke-linejoin: round; pointer-events: none; }
+.bldg.tone-red .bldg-label, .bldg.tone-brick .bldg-label, .bldg.tone-navy .bldg-label, .bldg.tone-gray .bldg-label { fill: #FFFFFF; stroke: rgba(0,0,0,.25); }
+.bldg.is-hot:hover .roof, .bldg.is-hot:focus-visible .roof { fill: #FFF3D1; stroke: var(--burgundy); stroke-width: 5; }
+.bldg.is-selected .roof { fill: #FFE7A6; stroke: var(--burgundy); stroke-width: 6; }
+.bldg.is-hot:hover .bldg-label, .bldg.is-selected .bldg-label { fill: var(--burgundy); stroke: rgba(255,255,255,.9); }
+.map-legend .lg-fence { border-top: 3px dashed #8C7B66; }
+
+.bldg-outline { fill: #FFFFFF; stroke: #CFC6B6; stroke-width: 6; stroke-linejoin: round; }
+.bldg-outline-shadow { fill: rgba(59, 42, 32, .17); }
+.bldg.tone-u .shadow { display: none; }
+
+/* ============================================================
+   Finishing layer: small touches that make the site feel premium.
+   Keeps the Figma layout; only refines colour depth, motion and detail.
+   ============================================================ */
+body {
+  background:
+    radial-gradient(1100px 520px at 100% -8%, rgba(244, 197, 66, 0.10), transparent 62%),
+    radial-gradient(900px 520px at -12% 28%, rgba(122, 12, 16, 0.045), transparent 60%),
+    var(--cream);
+  background-attachment: fixed;
+}
+::selection { background: rgba(244, 197, 66, 0.45); color: var(--ink); }
+html { scrollbar-color: #C9B9AE transparent; }
+
+/* Header: lighter glass, gains a soft shadow once the page scrolls */
+.site-header { background: rgba(255, 248, 243, 0.82); transition: box-shadow 0.3s var(--ease), background 0.3s var(--ease); }
+.site-header.is-scrolled { background: rgba(255, 250, 246, 0.92); box-shadow: 0 10px 30px rgba(74, 4, 4, 0.07); border-bottom-color: transparent; }
+.brand-mark { transition: transform 0.35s var(--ease); }
+.brand:hover .brand-mark { transform: rotate(-6deg) scale(1.05); }
+.nav-link::after {
+  content: ''; position: absolute; left: var(--s-2); right: var(--s-2); bottom: 6px; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--burgundy), var(--gold)); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease);
+}
+.nav-link:hover::after, .nav-link[aria-current="page"]::after { transform: scaleX(1); }
+
+/* Buttons: a little depth and lift */
+.btn-primary { background: linear-gradient(180deg, #951519 0%, var(--burgundy) 55%, #6A0A0E 100%); }
+.btn-primary:hover { background: linear-gradient(180deg, #7E1014 0%, var(--burgundy-dark) 100%); box-shadow: 0 14px 30px rgba(122, 12, 16, 0.34); transform: translateY(-1px); }
+.btn-gold { background: linear-gradient(180deg, #F8D263 0%, var(--gold) 60%, #EDB92A 100%); box-shadow: 0 10px 22px rgba(212, 160, 23, 0.28); }
+.btn-gold:hover { background: linear-gradient(180deg, #F4C542 0%, #E5AE1C 100%); transform: translateY(-1px); }
+.btn-dark:hover, .btn-outline:hover { transform: translateY(-1px); }
+.btn-outline:hover { box-shadow: 0 8px 18px rgba(74, 4, 4, 0.08); }
+.btn:active { transform: translateY(1px); }
+
+/* Cards: gentle lift, photo zoom */
+.item-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-3); border-color: var(--burgundy-100); }
+.item-media img { transition: transform 0.6s var(--ease); }
+.item-card:hover .item-media img { transform: scale(1.05); }
+.row-card:hover { box-shadow: 0 6px 16px rgba(74, 4, 4, 0.06); }
+
+/* Eyebrows get a short gold rule */
+.eyebrow:not(.eyebrow-pill)::before { content: ''; width: 18px; height: 2px; border-radius: 2px; background: var(--gold); flex: none; }
+
+/* Footer: richer maroon with a gold hairline */
+.site-footer {
+  position: relative;
+  background:
+    radial-gradient(700px 300px at 85% 0%, rgba(244, 197, 66, 0.10), transparent 70%),
+    linear-gradient(180deg, #820E13 0%, var(--burgundy) 45%, #5A070B 100%);
+}
+.site-footer::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.8; }
+.site-footer .icon-btn, .site-footer .social a { transition: transform 0.2s var(--ease), background 0.2s; }
+.site-footer .icon-btn:hover, .site-footer .social a:hover { transform: translateY(-2px); }
+
+/* Map frames get a soft inner edge */
+.map-shell { box-shadow: inset 0 0 0 1px rgba(74, 4, 4, 0.06); }
+.map-controls .icon-btn { transition: transform 0.2s var(--ease), background 0.2s; }
+.map-controls .icon-btn:hover { transform: scale(1.06); }
+
+/* Scroll reveal (only when JS is on and motion is allowed) */
+html.js-reveal .reveal { opacity: 0; transform: translateY(18px); }
+html.js-reveal .reveal.is-in { opacity: 1; transform: none; transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); transition-delay: var(--d, 0s); }
+@media (prefers-reduced-motion: reduce) { html.js-reveal .reveal { opacity: 1; transform: none; } }
+@media print { html.js-reveal .reveal { opacity: 1 !important; transform: none !important; } .site-header { position: static; } }
+/* Home map preview: show the whole campus, caption sits under the map */
+.preview-frame { display: flex; flex-direction: column; gap: var(--s-1); }
+.preview-frame .map-shell { aspect-ratio: 1830 / 1350; }
+.preview-cta { position: static; box-shadow: none; background: var(--surface-2); border: 1px solid var(--line); }
+/* Team: smaller portraits on phones, gentle hover */
+@media (max-width: 599.98px) { .team-card img { max-width: 260px; margin-inline: auto; } }
+.team-card img { transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease); }
+.team-card:hover img { transform: translateY(-4px); box-shadow: var(--shadow-3); }
+
+/* ============================================================
+   Gradient colour layer: same layout, richer colour.
+   Burgundy → wine, gold → amber, cream → blush.
+   ============================================================ */
+:root {
+  --grad-burgundy: linear-gradient(135deg, #A3171D 0%, #7A0C10 48%, #4A0404 100%);
+  --grad-burgundy-soft: linear-gradient(135deg, #9B1B20 0%, #7A0C10 100%);
+  --grad-gold: linear-gradient(135deg, #FFE08A 0%, #F4C542 45%, #E3A91B 100%);
+  --grad-sunrise: linear-gradient(135deg, #7A0C10 0%, #B8323A 55%, #E39A3C 100%);
+  --grad-cream: linear-gradient(180deg, #FFF6EA 0%, #FFF8F3 100%);
+  --grad-text: linear-gradient(100deg, #7A0C10 0%, #B8323A 55%, #C98A0E 100%);
+}
+
+/* Headline accents: gradient text (falls back to solid burgundy) */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  h1 .accent, h2 .accent, .page-hero h1 .accent, .hero h1 .accent {
+    background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent;
+    padding-right: 0.08em; /* italic overhang */
+  }
+  .hero h1 .accent-gold, h1 .accent-gold, h2 .accent-gold {
+    background: linear-gradient(100deg, #9A6A00 0%, #C98A0E 50%, #E0A82A 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+    padding-right: 0.08em;
+  }
+}
+
+/* Heroes: layered blush + gold glow */
+.hero::before {
+  background:
+    radial-gradient(55% 70% at 88% 6%, rgba(244, 197, 66, 0.28), transparent 70%),
+    radial-gradient(45% 60% at 2% 95%, rgba(184, 50, 58, 0.14), transparent 70%),
+    radial-gradient(40% 50% at 45% 40%, rgba(255, 255, 255, 0.7), transparent 70%),
+    linear-gradient(180deg, #FFF3E4 0%, #FFF8F3 100%);
+}
+.page-hero {
+  background:
+    radial-gradient(50% 90% at 90% 0%, rgba(244, 197, 66, 0.22), transparent 70%),
+    radial-gradient(45% 80% at 5% 100%, rgba(184, 50, 58, 0.10), transparent 70%),
+    linear-gradient(180deg, #FFF0E0 0%, #FFF8F3 100%);
+}
+
+/* Solid fills → gradients */
+.chip[aria-pressed="true"], .badge-solid-lost, .loc-bar, .tile.is-burgundy, .skip-link { background: var(--grad-burgundy-soft); }
+.badge-solid-found, .loc-bar.is-found, .tile.is-gold, .avatar-stack b, .corner-badge { background: var(--grad-gold); }
+.step:nth-child(odd) .step-icon { background: var(--grad-gold); }
+.step:nth-child(even) .step-icon { background: linear-gradient(135deg, #FFFFFF 0%, #FFF3E6 100%); }
+.item-card:hover .view-pill { background: var(--grad-burgundy-soft); }
+.progress span, .bar span { background: linear-gradient(90deg, #7A0C10 0%, #B8323A 60%, #E3A91B 100%); }
+.snapshot {
+  background:
+    radial-gradient(80% 60% at 100% 0%, rgba(244, 197, 66, 0.22), transparent 60%),
+    var(--grad-burgundy);
+}
+.cta-card {
+  background:
+    radial-gradient(70% 90% at 100% 100%, rgba(244, 197, 66, 0.25), transparent 60%),
+    var(--grad-burgundy);
+}
+.auth-bg::after { background: linear-gradient(160deg, rgba(74, 4, 4, .92) 0%, rgba(122, 12, 16, .86) 45%, rgba(184, 50, 58, .78) 80%, rgba(227, 154, 60, .55) 100%); }
+
+/* Section bands */
+.band-cream {
+  background:
+    radial-gradient(50% 80% at 0% 0%, rgba(255, 255, 255, 0.8), transparent 70%),
+    linear-gradient(135deg, #FFF4D6 0%, #FDEBC8 55%, #FBE0C4 100%);
+}
+.band-grey { background: linear-gradient(180deg, #F6F2EE 0%, #EFE9E4 100%); }
+.band-soft { background: linear-gradient(180deg, #FAF8F7 0%, #F4F0EE 100%); }
+.band-gold {
+  background:
+    radial-gradient(60% 80% at 90% 0%, rgba(255, 255, 255, 0.35), transparent 70%),
+    linear-gradient(135deg, #FFD966 0%, #F4C542 45%, #E8AE25 100%);
+}
+.band-gold .faq-item[open] { background: linear-gradient(135deg, #2A0D10 0%, #111111 100%); }
+.cta-band {
+  background:
+    radial-gradient(40% 80% at 15% 50%, rgba(244, 197, 66, 0.16), transparent 70%),
+    radial-gradient(40% 80% at 85% 50%, rgba(184, 50, 58, 0.12), transparent 70%),
+    linear-gradient(180deg, #FFF8F3 0%, #FBEDEA 100%);
+}
+
+/* Cards: hairline gradient edge on hover */
+.card, .item-card, .story-card { background-clip: padding-box; }
+.item-card::before {
+  content: ''; position: absolute; inset: 0; z-index: 3; border-radius: inherit; padding: 1.5px; pointer-events: none;
+  background: linear-gradient(135deg, rgba(122, 12, 16, .55), rgba(244, 197, 66, .7));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity .3s var(--ease);
+}
+.item-card:hover::before { opacity: 1; }
+.feature-icon, .cat-option .box .ico { background: linear-gradient(135deg, #FFFFFF 0%, #FFF1E2 100%); }
+.story-card blockquote { background: linear-gradient(135deg, #FFF9F0 0%, #FBF1EE 100%); }
+
+/* Brand name: subtle gradient on "napin Natin 'Yan!" */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .site-header .brand-name span { background: linear-gradient(100deg, #8A5A00, #C98A0E); -webkit-background-clip: text; background-clip: text; color: transparent; }
+}
+
+/* ---------- Page transitions: fade up on arrival, fade out on leave ---------- */
+@keyframes hny-page-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+main { animation: hny-page-in .55s cubic-bezier(.22, .8, .24, 1) both; }
+.site-footer { animation: hny-page-in .55s .08s cubic-bezier(.22, .8, .24, 1) both; }
+html.is-leaving main, html.is-leaving .site-footer { opacity: 0; transform: translateY(-8px); transition: opacity .22s ease, transform .22s ease; }
+/* Browsers with cross-document view transitions get a native cross-fade too */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: .22s ease both hny-vt-out; }
+::view-transition-new(root) { animation: .45s cubic-bezier(.22, .8, .24, 1) both hny-page-in; }
+@keyframes hny-vt-out { to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  main, .site-footer { animation: none; }
+  html.is-leaving main, html.is-leaving .site-footer { opacity: 1; transform: none; }
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero h1 .line-2, .hero h1 .line-3 { width: fit-content; -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: 0.1em; }
+  .hero h1 .line-2 { background-image: linear-gradient(100deg, #7A0C10 0%, #A8202A 55%, #C2414A 100%); }
+  .hero h1 .line-3 { background-image: linear-gradient(100deg, #8A5A00 0%, #B97D0A 50%, #D99A1E 100%); }
+  .accent-solid, h2.h-burgundy, .c-gold {
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .accent-solid, h2.h-burgundy { background-image: var(--grad-text); }
+  h2.h-burgundy { width: fit-content; margin-inline: auto; }
+  .c-gold { background-image: linear-gradient(100deg, #8A5A00 0%, #C98A0E 100%); }
+}
+/* Home hero: campus photo more visible; fade stays strong behind the headline so text reads clearly */
+.hero-bg img { opacity: .9; filter: saturate(1.05) contrast(1.02); }
+.hero-bg::after {
+  background:
+    linear-gradient(100deg, rgba(255,248,243,.94) 0%, rgba(255,248,243,.82) 38%, rgba(255,243,230,.45) 68%, rgba(255,240,225,.2) 100%),
+    linear-gradient(180deg, rgba(255,248,243,0) 70%, rgba(255,248,243,.9) 100%);
+}
+@media (max-width: 899.98px) {
+  .hero-bg::after { background: linear-gradient(180deg, rgba(255,248,243,.78) 0%, rgba(255,248,243,.88) 60%, rgba(255,248,243,.96) 100%); }
+}
+
+/* Street View: photo fade-in, counter, live mini map */
+.street-photo img { opacity: 0; transform: scale(1.03); transition: opacity .45s ease, transform .9s cubic-bezier(.22,.8,.24,1); }
+.street-photo img.is-in { opacity: 1; transform: none; }
+.street-count { margin-left: var(--s-1); padding-left: var(--s-1); border-left: 1px solid rgba(255,255,255,.3); color: rgba(255,255,255,.75); font-weight: 600; letter-spacing: .04em; }
+.street-mini { background: #E4EBDA; }
+.street-mini img { object-fit: initial; }
+.street-mini-dot { position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--burgundy); border: 3px solid #fff; box-shadow: 0 0 0 6px rgba(122,12,16,.25); animation: hny-ping 1.8s ease-out infinite; }
+@keyframes hny-ping { 0% { box-shadow: 0 0 0 0 rgba(122,12,16,.45); } 100% { box-shadow: 0 0 0 14px rgba(122,12,16,0); } }
+.street-chips { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { .street-photo img { opacity: 1; transform: none; } .street-mini-dot { animation: none; } }

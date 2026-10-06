@@ -1,205 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Browse Items | HAUnapin Natin ’Yan!</title>
-<meta name="description" content="Search and filter lost and found items reported at Holy Angel University.">
-<meta name="theme-color" content="#7A0C10">
-<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=20261009c">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Browse Items | HAUnapin Natin ’Yan!</title>
+  <meta name="description" content="Search and filter lost and found items reported at Holy Angel University.">
+  <meta name="theme-color" content="#7A0C10">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=20261010u">
 </head>
+
 <body data-page="browse">
 
-<a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="index.html" aria-label="HAUnapin Natin ’Yan! home"><img class="brand-mark" src="images/logo-mark.png" alt="" width="40" height="40"><span class="brand-name ">HAU<span>napin Natin ’Yan!</span></span></a>
-    <nav class="main-nav" aria-label="Primary">
-      <ul class="nav-list list-reset" role="list">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="HAUnapin Natin ’Yan! home"><img class="brand-mark"
+          src="images/logo-mark.png" alt="" width="40" height="40"><span class="brand-name ">HAU<span>napin Natin
+            ’Yan!</span></span></a>
+      <nav class="main-nav" aria-label="Primary">
+        <ul class="nav-list list-reset" role="list">
           <li><a class="nav-link" href="index.html" data-nav="home">Home</a></li>
           <li><a class="nav-link" href="browse.html" data-nav="browse">Browse Items</a></li>
           <li><a class="nav-link" href="map.html" data-nav="map">Campus Map</a></li>
           <li><a class="nav-link" href="how.html" data-nav="how">How It Works</a></li>
           <li><a class="nav-link" href="about.html" data-nav="about">About</a></li>
-      </ul>
-    </nav>
-    <div class="header-actions">
-      <a class="btn btn-primary header-cta" href="report.html"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>Report Item</a>
-      <div id="accountSlot" class="account-slot"></div>
-      <button type="button" class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-    </div>
-  </div>
-</header>
-<div class="drawer-backdrop" id="drawerBackdrop" hidden>
-  <aside class="drawer" id="drawer" aria-label="Menu" hidden>
-    <div class="drawer-head">
-      <a class="brand" href="index.html" aria-label="HAUnapin Natin ’Yan! home"><img class="brand-mark" src="images/logo-mark.png" alt="" width="40" height="40"><span class="brand-name ">HAU<span>napin Natin ’Yan!</span></span></a>
-      <button type="button" class="icon-btn" data-close-drawer aria-label="Close menu"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    </div>
-    <nav class="drawer-nav" aria-label="Mobile">
-      <a href="index.html" data-nav="home">Home</a>
-      <a href="browse.html" data-nav="browse">Browse Items</a>
-      <a href="map.html" data-nav="map">Campus Map</a>
-      <a href="how.html" data-nav="how">How It Works</a>
-      <a href="about.html" data-nav="about">About</a>
-      <a href="stories.html" data-nav="stories">Success Stories</a>
-      <a href="safety.html" data-nav="safety">Safety Guidelines</a>
-      <a href="help.html" data-nav="help">Help Centre</a>
-    </nav>
-    <div class="drawer-account" id="drawerAccount"></div>
-    <div class="drawer-foot">
-      <a class="btn btn-primary btn-lg" href="report.html?type=lost"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>I Lost Something</a>
-      <a class="btn btn-gold btn-lg" href="report.html?type=found"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 11V6.5a1.5 1.5 0 0 1 3 0V11M10 10.5V5a1.5 1.5 0 0 1 3 0v5.5M13 10.5V6a1.5 1.5 0 0 1 3 0v6M16 11a1.5 1.5 0 0 1 3 0v3a7 7 0 0 1-7 7h-.5a6 6 0 0 1-4.6-2.2L4 15.5a1.5 1.5 0 0 1 2.2-2L7 14.5V11"/></svg>I Found Something</a>
-    </div>
-  </aside>
-</div>
-<div class="page">
-<main id="main" tabindex="-1">
-
-  <section class="page-hero" aria-labelledby="browseTitle">
-    <div class="container browse-hero-grid">
-      <div>
-        <p class="eyebrow eyebrow-pill"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 8 12 4l8.5 4v8L12 20l-8.5-4V8Z"/><path d="M3.5 8 12 12l8.5-4M12 12v8"/></svg>HAU community archive</p>
-        <h1 id="browseTitle">Find what you’re <span class="accent">looking for</span></h1>
-        <p>Search lost and found reports from the Holy Angel University community. Filter by status, category, building and date.</p>
-        <form class="search-row" role="search" id="searchForm">
-          <label class="visually-hidden" for="searchInput">Search items</label>
-          <div class="input-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg><input class="input" id="searchInput" type="search" placeholder="Search keys, wallets, IDs, bags…" autocomplete="off"></div>
-          <button class="btn btn-primary" type="submit">Search</button>
-        </form>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary header-cta" href="report.html"><svg class="icon" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+            focusable="false">
+            <path d="M12 5v14M5 12h14" />
+          </svg>Report Item</a>
+        <div id="accountSlot" class="account-slot"></div>
+        <button type="button" class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false"
+          aria-controls="drawer"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg></button>
       </div>
-      <aside class="snapshot" aria-labelledby="snapTitle">
-        <h2 id="snapTitle">Today’s campus snapshot</h2>
-        <div class="snapshot-stats">
-          <div><strong id="snapOpen">0</strong><span>Open</span></div>
-          <div><strong id="snapFound">0</strong><span>Found</span></div>
-          <div><strong id="snapLost">0</strong><span>Lost</span></div>
-        </div>
-        <p class="snapshot-note"><span class="dot" aria-hidden="true"></span><span><b>Newest first</b><small id="snapFresh">Fresh reports from this week</small></span></p>
-        <p class="snapshot-note"><span class="dot" aria-hidden="true"></span><span><b>Most active areas</b><small id="snapAreas">—</small></span></p>
-      </aside>
     </div>
-  </section>
-
-  <div class="container browse-layout">
-    <aside class="filters card card-pad" aria-labelledby="filtersTitle" id="filtersAside">
-      <div class="filters-head">
-        <h2 id="filtersTitle">Filters</h2>
-        <span class="active-count" id="activeCount" hidden>0 active</span>
+  </header>
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden>
+    <aside class="drawer" id="drawer" aria-label="Menu" hidden>
+      <div class="drawer-head">
+        <a class="brand" href="index.html" aria-label="HAUnapin Natin ’Yan! home"><img class="brand-mark"
+            src="images/logo-mark.png" alt="" width="40" height="40"><span class="brand-name ">HAU<span>napin Natin
+              ’Yan!</span></span></a>
+        <button type="button" class="icon-btn" data-close-drawer aria-label="Close menu"><svg class="icon"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M6 6l12 12M18 6 6 18" />
+          </svg></button>
       </div>
-      <div id="filterHome">
-        <form id="filterForm" class="filter-form" aria-label="Filter items">
-          <fieldset class="filter-group" style="border-top:0;padding-top:0">
-            <legend>Status</legend>
-            <label class="check"><input type="checkbox" name="status" value="lost" checked> Lost items</label>
-            <label class="check"><input type="checkbox" name="status" value="found" checked> Found items</label>
-            <label class="check"><input type="checkbox" name="returned" value="1"> Include returned items</label>
-          </fieldset>
-          <fieldset class="filter-group">
-            <legend>Category</legend>
-            <div class="radio-list" id="catChecks"></div>
-          </fieldset>
-          <div class="filter-group">
-            <label class="filter-title" for="fBldg" style="display:block">Location</label>
-            <select class="select" id="fBldg" name="bldg"><option value="">All buildings</option></select>
-          </div>
-          <fieldset class="filter-group">
-            <legend>Date reported</legend>
-            <label class="check"><input type="radio" name="range" value="all" checked> Any time</label>
-            <label class="check"><input type="radio" name="range" value="24h"> Last 24 hours</label>
-            <label class="check"><input type="radio" name="range" value="7d"> Last 7 days</label>
-          </fieldset>
-          <button type="button" class="btn btn-outline btn-block" data-clear>Clear all filters</button>
-        </form>
+      <nav class="drawer-nav" aria-label="Mobile">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="browse.html" data-nav="browse">Browse Items</a>
+        <a href="map.html" data-nav="map">Campus Map</a>
+        <a href="how.html" data-nav="how">How It Works</a>
+        <a href="about.html" data-nav="about">About</a>
+        <a href="stories.html" data-nav="stories">Success Stories</a>
+        <a href="safety.html" data-nav="safety">Safety Guidelines</a>
+        <a href="help.html" data-nav="help">Help Centre</a>
+      </nav>
+      <div class="drawer-account" id="drawerAccount"></div>
+      <div class="drawer-foot">
+        <a class="btn btn-primary btn-lg" href="report.html?type=lost"><svg class="icon" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+            focusable="false">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.6-3.6" />
+          </svg>I Lost Something</a>
+        <a class="btn btn-gold btn-lg" href="report.html?type=found"><svg class="icon" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+            focusable="false">
+            <path
+              d="M7 11V6.5a1.5 1.5 0 0 1 3 0V11M10 10.5V5a1.5 1.5 0 0 1 3 0v5.5M13 10.5V6a1.5 1.5 0 0 1 3 0v6M16 11a1.5 1.5 0 0 1 3 0v3a7 7 0 0 1-7 7h-.5a6 6 0 0 1-4.6-2.2L4 15.5a1.5 1.5 0 0 1 2.2-2L7 14.5V11" />
+          </svg>I Found Something</a>
       </div>
     </aside>
+  </div>
+  <div class="page">
+    <main id="main" tabindex="-1">
 
-    <section aria-labelledby="resultsTitle">
-      <h2 id="resultsTitle" class="visually-hidden">Results</h2>
-      <div class="results-bar card">
-        <p id="resultCount" aria-live="polite">Showing <b>0</b> items</p>
-        <div class="cluster">
-          <div class="cluster" role="group" aria-label="Quick status filter" id="quickStatus">
-            <button type="button" class="chip" data-quick="all" aria-pressed="true">All</button>
-            <button type="button" class="chip" data-quick="lost" aria-pressed="false">Lost</button>
-            <button type="button" class="chip" data-quick="found" aria-pressed="false">Found</button>
+      <section class="page-hero" aria-labelledby="browseTitle">
+        <div class="container browse-hero-grid">
+          <div>
+            <p class="eyebrow eyebrow-pill"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M3.5 8 12 4l8.5 4v8L12 20l-8.5-4V8Z" />
+                <path d="M3.5 8 12 12l8.5-4M12 12v8" />
+              </svg>HAU community archive</p>
+            <h1 id="browseTitle">Find what you’re <span class="accent"><br>looking for</span></h1>
+            <p>Search lost and found reports from the Holy Angel University community. Filter by status, category,
+              building and date.</p>
+            <form class="search-row" role="search" id="searchForm">
+              <label class="visually-hidden" for="searchInput">Search items</label>
+              <div class="input-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                  focusable="false">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-3.6-3.6" />
+                </svg><input class="input" id="searchInput" type="search" placeholder="Search keys, wallets, IDs, bags…"
+                  autocomplete="off"></div>
+              <button class="btn btn-primary" type="submit">Search</button>
+            </form>
           </div>
-          <button type="button" class="btn btn-outline mobile-filter-btn" id="openFilters" aria-controls="filterSheet" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filters</button>
-          <div class="sort-wrap">
-            <label for="sortSelect">Sort by</label>
-            <select class="select" id="sortSelect"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select>
+          <aside class="snapshot" aria-labelledby="snapTitle">
+            <h2 id="snapTitle">Today’s campus snapshot</h2>
+            <div class="snapshot-stats">
+              <div><strong id="snapOpen">0</strong><span>Open</span></div>
+              <div><strong id="snapFound">0</strong><span>Found</span></div>
+              <div><strong id="snapLost">0</strong><span>Lost</span></div>
+            </div>
+            <p class="snapshot-note"><span class="dot" aria-hidden="true"></span><span><b>Newest first</b><small
+                  id="snapFresh">Fresh reports from this week</small></span></p>
+            <p class="snapshot-note"><span class="dot" aria-hidden="true"></span><span><b>Most active areas</b><small
+                  id="snapAreas">—</small></span></p>
+          </aside>
+        </div>
+      </section>
+
+      <div class="container browse-layout">
+        <aside class="filters card card-pad" aria-labelledby="filtersTitle" id="filtersAside">
+          <div class="filters-head">
+            <h2 id="filtersTitle">Filters</h2>
+            <span class="active-count" id="activeCount" hidden>0 active</span>
           </div>
+          <div id="filterHome">
+            <form id="filterForm" class="filter-form" aria-label="Filter items">
+              <fieldset class="filter-group" style="border-top:0;padding-top:0">
+                <legend>Status</legend>
+                <label class="check"><input type="checkbox" name="status" value="lost" checked> Lost items</label>
+                <label class="check"><input type="checkbox" name="status" value="found" checked> Found items</label>
+                <label class="check"><input type="checkbox" name="returned" value="1"> Include returned items</label>
+              </fieldset>
+              <fieldset class="filter-group">
+                <legend>Category</legend>
+                <div class="radio-list" id="catChecks"></div>
+              </fieldset>
+              <div class="filter-group">
+                <label class="filter-title" for="fBldg" style="display:block">Location</label>
+                <select class="select" id="fBldg" name="bldg">
+                  <option value="">All buildings</option>
+                </select>
+              </div>
+              <fieldset class="filter-group">
+                <legend>Date reported</legend>
+                <label class="check"><input type="radio" name="range" value="all" checked> Any time</label>
+                <label class="check"><input type="radio" name="range" value="24h"> Last 24 hours</label>
+                <label class="check"><input type="radio" name="range" value="7d"> Last 7 days</label>
+              </fieldset>
+              <button type="button" class="btn btn-outline btn-block" data-clear>Clear all filters</button>
+            </form>
+          </div>
+        </aside>
+
+        <section aria-labelledby="resultsTitle">
+          <h2 id="resultsTitle" class="visually-hidden">Results</h2>
+          <div class="results-bar card">
+            <p id="resultCount" aria-live="polite">Showing <b>0</b> items</p>
+            <div class="cluster">
+              <div class="cluster" role="group" aria-label="Quick status filter" id="quickStatus">
+                <button type="button" class="chip" data-quick="all" aria-pressed="true">All</button>
+                <button type="button" class="chip" data-quick="lost" aria-pressed="false">Lost</button>
+                <button type="button" class="chip" data-quick="found" aria-pressed="false">Found</button>
+              </div>
+              <button type="button" class="btn btn-outline mobile-filter-btn" id="openFilters"
+                aria-controls="filterSheet" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true" focusable="false">
+                  <path d="M4 6h16M7 12h10M10 18h4" />
+                </svg>Filters</button>
+              <div class="sort-wrap">
+                <label for="sortSelect">Sort by</label>
+                <select class="select" id="sortSelect">
+                  <option value="newest">Newest first</option>
+                  <option value="oldest">Oldest first</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-3" id="resultsGrid"></div>
+          <div class="load-more" id="loadMore" hidden>
+            <p class="muted" id="loadInfo" style="font-size:var(--fs-sm)"></p>
+            <div class="progress" aria-hidden="true"><span id="loadBar"></span></div>
+            <button type="button" class="btn btn-outline btn-lg" id="loadMoreBtn">Load more items<svg class="icon"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M4 12a8 8 0 1 0 2.4-5.7" />
+                <path d="M4 4v4h4" />
+              </svg></button>
+          </div>
+        </section>
+      </div>
+
+      <div class="sheet-backdrop" id="filterSheetBackdrop" data-mobile-only hidden>
+        <section class="sheet" id="filterSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"
+          data-mobile-only hidden>
+          <div class="sheet-grip" aria-hidden="true"></div>
+          <div class="sheet-head">
+            <h2 id="sheetTitle">Filters</h2><button type="button" class="icon-btn" data-close-sheet
+              aria-label="Close filters"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M6 6l12 12M18 6 6 18" />
+              </svg></button>
+          </div>
+          <div class="sheet-body" id="filterSheetBody"></div>
+          <div class="sheet-foot"><button type="button" class="btn btn-outline" id="sheetClear">Clear
+              all</button><button type="button" class="btn btn-primary" data-close-sheet id="sheetApply">Show
+              items</button></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-brand">
+        <a class="brand brand-footer" href="index.html" aria-label="HAUnapin Natin ’Yan! home"><img
+            class="brand-mark footer-logo" src="images/logo-mark.png" alt="" width="40" height="40"><span
+            class="brand-name">HAU<span>napin Natin ’Yan!</span></span></a>
+        <p>Dedicated to helping the Angelite community recover lost items and keep a culture of honesty and care since
+          2026.</p>
+        <div class="socials">
+          <a href="https://www.facebook.com/holyangel1933" target="_blank" rel="noopener"
+            aria-label="Holy Angel University on Facebook (opens in a new tab)"><svg class="icon" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true" focusable="false">
+              <path d="M14 3h3v4h-2.5a1 1 0 0 0-1 1v2.5H17l-.5 4h-3V21h-4v-6.5H7v-4h2.5V7.5A4.5 4.5 0 0 1 14 3Z" />
+            </svg></a>
+          <a href="https://twitter.com/holyangel1933" target="_blank" rel="noopener"
+            aria-label="Holy Angel University on X (opens in a new tab)"><svg class="icon" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true" focusable="false">
+              <path d="M4 4l16 16M20 4 4 20" />
+            </svg></a>
+          <a href="https://www.instagram.com/holyangel1933/" target="_blank" rel="noopener"
+            aria-label="Holy Angel University on Instagram (opens in a new tab)"><svg class="icon" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true" focusable="false">
+              <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <path d="M17.2 6.8v.01" />
+            </svg></a>
         </div>
       </div>
-      <div class="grid grid-3" id="resultsGrid"></div>
-      <div class="load-more" id="loadMore" hidden>
-        <p class="muted" id="loadInfo" style="font-size:var(--fs-sm)"></p>
-        <div class="progress" aria-hidden="true"><span id="loadBar"></span></div>
-        <button type="button" class="btn btn-outline btn-lg" id="loadMoreBtn">Load more items<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></svg></button>
-      </div>
-    </section>
-  </div>
-
-  <div class="sheet-backdrop" id="filterSheetBackdrop" data-mobile-only hidden>
-    <section class="sheet" id="filterSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" data-mobile-only hidden>
-      <div class="sheet-grip" aria-hidden="true"></div>
-      <div class="sheet-head"><h2 id="sheetTitle">Filters</h2><button type="button" class="icon-btn" data-close-sheet aria-label="Close filters"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-      <div class="sheet-body" id="filterSheetBody"></div>
-      <div class="sheet-foot"><button type="button" class="btn btn-outline" id="sheetClear">Clear all</button><button type="button" class="btn btn-primary" data-close-sheet id="sheetApply">Show items</button></div>
-    </section>
-  </div>
-</main>
-</div>
-
-<footer class="site-footer">
-  <div class="container footer-top">
-    <div class="footer-brand">
-      <a class="brand brand-footer" href="index.html" aria-label="HAUnapin Natin ’Yan! home"><img class="brand-mark footer-logo" src="images/logo-mark.png" alt="" width="40" height="40"><span class="brand-name">HAU<span>napin Natin ’Yan!</span></span></a>
-      <p>Dedicated to helping the Angelite community recover lost items and keep a culture of honesty and care since 2026.</p>
-      <div class="socials">
-        <a href="https://www.facebook.com/holyangel1933" target="_blank" rel="noopener" aria-label="Holy Angel University on Facebook (opens in a new tab)"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3h3v4h-2.5a1 1 0 0 0-1 1v2.5H17l-.5 4h-3V21h-4v-6.5H7v-4h2.5V7.5A4.5 4.5 0 0 1 14 3Z"/></svg></a>
-        <a href="https://twitter.com/holyangel1933" target="_blank" rel="noopener" aria-label="Holy Angel University on X (opens in a new tab)"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 4l16 16M20 4 4 20"/></svg></a>
-        <a href="https://www.instagram.com/holyangel1933/" target="_blank" rel="noopener" aria-label="Holy Angel University on Instagram (opens in a new tab)"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.2 6.8v.01"/></svg></a>
-      </div>
+      <nav class="footer-col" aria-labelledby="fPlatform">
+        <h2 id="fPlatform">Platform</h2>
+        <a href="report.html?type=lost">Report Lost Item</a>
+        <a href="report.html?type=found">Report Found Item</a>
+        <a href="browse.html">Browse Gallery</a>
+        <a href="map.html">Campus Map</a>
+      </nav>
+      <nav class="footer-col" aria-labelledby="fResources">
+        <h2 id="fResources">Resources</h2>
+        <a href="safety.html">Safety Guidelines</a>
+        <a href="stories.html">Success Stories</a>
+        <a href="about.html#mission">Community Trust</a>
+        <a href="how.html">How-to Guide</a>
+      </nav>
+      <nav class="footer-col" aria-labelledby="fSupport">
+        <h2 id="fSupport">Support</h2>
+        <a href="help.html">Help Centre</a>
+        <a href="help.html#contact">Security Office</a>
+        <a href="legal.html#privacy">Privacy Policy</a>
+        <a href="legal.html#terms">Terms of Service</a>
+      </nav>
     </div>
-    <nav class="footer-col" aria-labelledby="fPlatform">
-      <h2 id="fPlatform">Platform</h2>
-      <a href="report.html?type=lost">Report Lost Item</a>
-      <a href="report.html?type=found">Report Found Item</a>
-      <a href="browse.html">Browse Gallery</a>
-      <a href="map.html">Campus Map</a>
-    </nav>
-    <nav class="footer-col" aria-labelledby="fResources">
-      <h2 id="fResources">Resources</h2>
-      <a href="safety.html">Safety Guidelines</a>
-      <a href="stories.html">Success Stories</a>
-      <a href="about.html#mission">Community Trust</a>
-      <a href="how.html">How-to Guide</a>
-    </nav>
-    <nav class="footer-col" aria-labelledby="fSupport">
-      <h2 id="fSupport">Support</h2>
-      <a href="help.html">Help Centre</a>
-      <a href="help.html#contact">Security Office</a>
-      <a href="legal.html#privacy">Privacy Policy</a>
-      <a href="legal.html#terms">Terms of Service</a>
-    </nav>
-  </div>
-  <div class="container footer-bottom">
-    <p>&copy; <span id="year">2026</span> HAUnapin Natin ’Yan! Proudly serving the Angelite community.</p>
-    <p class="footer-note"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>Not officially affiliated with HAU Administration.</p>
-  </div>
-</footer>
-<script src="js/sync.js?v=20261009c"></script>
-<script src="js/icons.js?v=20261009c"></script>
-<script src="js/data.js?v=20261009c"></script>
-<script src="js/store.js?v=20261009c"></script>
-<script src="js/auth.js?v=20261009c"></script>
-<script src="js/ui.js?v=20261009c"></script>
-<script src="js/pages/browse.js?v=20261009c"></script>
+    <div class="container footer-bottom">
+      <p>&copy; <span id="year">2026</span> HAUnapin Natin ’Yan! Proudly serving the Angelite community.</p>
+      <p class="footer-note"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 11v5M12 8v.01" />
+        </svg>Not officially affiliated with HAU Administration.</p>
+    </div>
+  </footer>
+  <script src="js/sync.js?v=20261010u"></script>
+  <script src="js/icons.js?v=20261010u"></script>
+  <script src="js/data.js?v=20261010u"></script>
+  <script src="js/store.js?v=20261010u"></script>
+  <script src="js/auth.js?v=20261010u"></script>
+  <script src="js/ui.js?v=20261010u"></script>
+  <script src="js/pages/browse.js?v=20261010u"></script>
 </body>
+
 </html>

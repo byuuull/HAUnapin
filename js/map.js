@@ -23,83 +23,69 @@ window.HNY = window.HNY || {};
   const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- static scenery (drawn once per map) ---------- */
-  function center(b) {
-    return b.shape === 'circle' ? { x: b.cx, y: b.cy } : { x: b.x + b.w / 2, y: b.y + b.h / 2 };
-  }
+  const center = (b) => ({ x: b.ax, y: b.ay });
 
+  /* A building: soft shadow, roof outline, number badge and short name */
   function buildingSVG(b) {
     const tone = b.tone ? ` tone-${b.tone}` : '';
-    let shapes = '';
-    if (b.shape === 'circle') {
-      const { cx, cy, r, d } = b;
-      shapes = `<rect class="front" x="${cx - r}" y="${cy}" width="${r * 2}" height="${d}"/>
-        <ellipse class="front" cx="${cx}" cy="${cy + d}" rx="${r}" ry="${r * 0.55}"/>
-        <ellipse class="roof" cx="${cx}" cy="${cy}" rx="${r}" ry="${r * 0.55}"/>
-        <ellipse class="side" cx="${cx}" cy="${cy}" rx="${r * 0.55}" ry="${r * 0.3}" opacity=".35"/>
-        <path d="M${cx} ${cy - 26} v18 M${cx - 6} ${cy - 20} h12" stroke="#7A0C10" stroke-width="3" stroke-linecap="round"/>`;
-    } else {
-      const { x, y, w, h, d } = b;
-      let wins = '';
-      if (d >= 18) {
-        const rows = Math.max(1, Math.floor((d - 6) / 9));
-        const cols = Math.max(2, Math.floor((w - 8) / 14));
-        const gap = (w - 8) / cols;
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) wins += `<rect class="win" x="${(x + 6 + c * gap).toFixed(1)}" y="${y + h + 4 + r * 9}" width="${(gap - 5).toFixed(1)}" height="5" rx="1"/>`;
-        }
-      }
-      shapes = `<rect class="front" x="${x}" y="${y + h}" width="${w}" height="${d}" rx="2"/>${wins}
-        <rect class="roof" x="${x}" y="${y}" width="${w}" height="${h}" rx="4"/>`;
-      if (b.courtyard) shapes += `<rect x="${x + w * 0.24}" y="${y + h * 0.25}" width="${w * 0.52}" height="${h * 0.5}" rx="3" fill="#BFE0EA" stroke="#9CC6D3"/>`;
-      if (b.tone === 'blue') shapes += `<path d="M${x + 10} ${y + h / 2} H${x + w - 10}" stroke="#C9D7E3" stroke-width="2"/>`;
-    }
-    const c = center(b);
+    const { x, y, w, h } = b.box;
+    let extra = '';
+    if (b.tone === 'cream') extra = `<rect class="roof-detail" x="${x + w * 0.18}" y="${y + h * 0.17}" width="${w * 0.64}" height="${h * 0.59}" rx="14"/>`;
+    if (b.tone === 'sfj') extra = `<circle class="roof-ring" cx="${b.ax}" cy="${b.ay}" r="${Math.min(w, h) * 0.34}"/>`;
+    if (b.tone === 'court') extra = `<path class="roof-line" d="M${x + 14} ${y + h * 0.42} H${x + w - 14}"/>`;
+    if (b.tone === 'chapel') extra = `<path class="chapel-cross" d="M${x + 58} ${y + 34} v26 M${x + 49} ${y + 43} h18"/>`;
     const label = b.code.length > 6 ? b.code.split(' ')[0] : b.code;
-    const ly = b.shape === 'circle' ? c.y + 10 : b.y + b.h - Math.min(12, b.h * 0.28);
+    const small = Math.min(w, h) < 90;
+    const br = small ? 21 : 26;
     return `<g class="bldg is-hot${tone}" data-bldg="${b.id}" tabindex="-1" role="button" aria-label="${esc(b.name)}">
-      ${shapes}
-      <text class="bldg-label" x="${c.x}" y="${ly}">${esc(label)}</text>
+      <path class="shadow" d="${b.path}" transform="translate(6 9)"/>
+      <path class="roof" d="${b.path}"/>
+      ${extra}
+      <g class="bldg-badge" transform="translate(${b.ax} ${b.ay})"><circle r="${br}"/><text>${b.num}</text></g>
+      <text class="bldg-label" x="${b.ax}" y="${b.ay + br + 20}">${esc(label)}</text>
     </g>`;
   }
 
-  /* Grounds inside the perimeter fence only: lawns, drive lanes, walkways, plaza, trees, gates */
+  /* Grounds: paved campus, lawns, drive lanes, roundabout, covered walkways, fence, gates, trees */
   function scenery() {
     const C = CAMPUS;
     const lawns = C.lawns.map((d) => `<path class="map-lawn" d="${d}"/>`).join('');
-    const drives = C.drives.map((r) => `<path class="map-drive" d="${r.d}" stroke-width="${r.w}"/>`).join('')
-      + C.drives.map((r) => `<path class="map-drive-line" d="${r.d}"/>`).join('');
-    const walks = C.walks.map((w) => `<path class="map-walk" d="${w.d}" stroke-width="${w.w}"/>`).join('');
-    const p = C.promenade;
-    const promenade = `<path class="map-walk" stroke-width="10" d="M${p.cx - p.r} ${p.cy + 8} A${p.r} ${p.r} 0 1 1 ${p.cx + p.r} ${p.cy + 8}"/>`;
+    const roads = C.roads.map((d) => `<path class="map-drive-edge" d="${d}"/>`).join('')
+      + C.roads.map((d) => `<path class="map-drive" d="${d}"/>`).join('')
+      + C.roads.map((d) => `<path class="map-drive-line" d="${d}"/>`).join('');
     const r = C.roundabout;
-    const pool = C.pool;
-    const trees = C.trees.map(([x, y], i) => `<circle class="map-tree" cx="${x}" cy="${y}" r="${5 + (i % 3) * 1.5}"/>`).join('');
+    const roundabout = `<circle class="map-drive-edge-c" cx="${r.cx}" cy="${r.cy}" r="124"/>
+      <circle class="map-asphalt" cx="${r.cx}" cy="${r.cy}" r="114"/>
+      <circle class="map-drive-line" cx="${r.cx}" cy="${r.cy}" r="89"/>
+      <circle class="map-plaza" cx="${r.cx}" cy="${r.cy}" r="66"/>
+      <circle class="map-fountain" cx="${r.cx}" cy="${r.cy}" r="44"/>
+      <circle class="map-fountain-jet" cx="${r.cx}" cy="${r.cy}" r="15"/>`;
+    const canopies = C.canopies.map(([x, y, w, h]) => {
+      const seams = w > 300 ? `<path class="canopy-seam" d="M${x + w / 3} ${y} V${y + h} M${x + (2 * w) / 3} ${y} V${y + h}"/>` : '';
+      return `<rect class="map-canopy-shadow" x="${x + 5}" y="${y + 8}" width="${w}" height="${h}" rx="8"/><rect class="map-canopy" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/><path class="canopy-ridge" d="M${x + 8} ${y + h / 2} H${x + w - 8}"/>${seams}`;
+    }).join('');
+    const trees = C.trees.map(([x, y], i) => {
+      const rr = 15 + (i % 3) * 4;
+      return `<circle class="map-tree-shadow" cx="${x + 4}" cy="${y + 6}" r="${rr}"/><circle class="map-tree${i % 2 ? ' alt' : ''}" cx="${x}" cy="${y}" r="${rr}"/>`;
+    }).join('');
+    const fence = C.fences.map((d) => `<path class="map-fence" d="${d}"/>`).join('')
+      + C.posts.map(([x, y]) => `<rect class="map-post" x="${x - 15}" y="${y - 15}" width="30" height="30" rx="5"/>`).join('');
     const gates = C.gates.map((g) => {
-      const off = { down: [0, 20], up: [0, -12], left: [-8, 4], right: [8, 4] }[g.dir];
-      const anchor = g.dir === 'left' ? 'end' : g.dir === 'right' ? 'start' : 'middle';
-      const bar = g.dir === 'left' || g.dir === 'right' ? `M${g.x} ${g.y - 13} V${g.y + 13}` : `M${g.x - 15} ${g.y} H${g.x + 15}`;
-      return `<g class="map-gate"><path d="${bar}"/><text x="${g.x + off[0]}" y="${g.y + off[1]}" text-anchor="${anchor}">${esc(g.label)}</text></g>`;
+      if (g.dir === 'left') return `<text class="map-gate-label" transform="translate(${g.x} ${g.y}) rotate(-90)" text-anchor="middle">${esc(g.label)}</text>`;
+      return `<text class="map-gate-label" x="${g.x}" y="${g.y}" text-anchor="middle">${esc(g.label)}</text>`;
     }).join('');
-    // Long landmark names wrap onto two lines so they stay inside their lawn
-    const marks = C.landmarks.map((l) => {
-      const words = l.label.split(' ');
-      const lines = words.length > 2 ? [words.slice(0, 1).join(' '), words.slice(1).join(' ')] : [l.label];
-      return `<text class="landmark-label" x="${l.x}" y="${l.y - (lines.length - 1) * 5}">${lines.map((t, i) => `<tspan x="${l.x}" dy="${i ? 11 : 0}">${esc(t)}</tspan>`).join('')}</text>`;
-    }).join('');
+    const outlines = (C.outlines || []).map((d) => `<path class="bldg-outline-shadow" d="${d}" transform="translate(6 9)"/><path class="bldg-outline" d="${d}"/>`).join('');
+    const marks = C.landmarks.map((l) => `<text class="landmark-label" x="${l.x}" y="${l.y}">${esc(l.label)}</text>`).join('');
     return `
       <rect class="map-ground" x="-2400" y="-1600" width="${W + 4800}" height="${H + 3200}"/>
       <path class="map-campus" d="${C.boundary}"/>
       ${lawns}
-      ${drives}
-      ${walks}
-      ${promenade}
-      <circle class="map-plaza" cx="${r.cx}" cy="${r.cy}" r="${r.r * 1.6}"/>
-      <circle class="map-fountain" cx="${r.cx}" cy="${r.cy}" r="${r.r * 0.6}"/>
-      <rect class="map-pool" x="${pool.x}" y="${pool.y}" width="${pool.w}" height="${pool.h}" rx="${pool.w / 2}"/>
-      <circle class="map-fountain" cx="${pool.x + pool.w / 2}" cy="${pool.y + pool.h / 2}" r="6"/>
-      <circle class="map-epiphany" cx="${C.landmarks[0].x}" cy="${C.landmarks[0].y - 18}" r="7"/>
+      ${roads}
+      ${roundabout}
+      ${canopies}
       ${trees}
-      <path class="map-fence" d="${C.boundary}"/>
+      ${outlines}
+      ${fence}
       ${gates}
       ${marks}`;
   }
@@ -132,7 +118,7 @@ window.HNY = window.HNY || {};
         role="group" aria-roledescription="map" aria-label="${esc(opts.label)}${interactive ? '. Use arrow keys to move, plus and minus to zoom.' : ''}">
         <g class="vp">
           <g class="layer-scenery" aria-hidden="true">${scenery()}</g>
-          <g class="layer-bldg">${[...BUILDINGS].sort((a, b) => (a.y ?? a.cy) - (b.y ?? b.cy)).map(buildingSVG).join('')}</g>
+          <g class="layer-bldg">${BUILDINGS.map(buildingSVG).join('')}</g>
           <g class="layer-count" aria-hidden="true"></g>
           <g class="layer-pins"></g>
           <g class="layer-pick"></g>
@@ -249,7 +235,7 @@ window.HNY = window.HNY || {};
       const phone = wb.rect.width < 600 && !opts.fit;
       const auto = phone ? Math.min(Math.max(wb.vw / W, wb.vh / H) * 0.98, 2.4) : fit;
       const s = clamp(opts.initialScale || auto, opts.minScale, opts.maxScale);
-      const focus = opts.initialCentre || (phone ? { x: 560, y: 300 } : { x: (bbox.x0 + bbox.x1) / 2, y: (bbox.y0 + bbox.y1) / 2 });
+      const focus = opts.initialCentre || (phone ? { x: 820, y: 640 } : { x: (bbox.x0 + bbox.x1) / 2, y: (bbox.y0 + bbox.y1) / 2 });
       home = clampView({ s, tx: wb.x0 + wb.vw / 2 - focus.x * s, ty: wb.y0 + wb.vh / 2 - focus.y * s });
     }
 
@@ -295,8 +281,8 @@ window.HNY = window.HNY || {};
     /* -- buildings -- */
     function setCounts(counts) {
       countLayer.innerHTML = BUILDINGS.filter((b) => counts[b.id]).map((b) => {
-        const x = b.shape === 'circle' ? b.cx + b.r * 0.75 : b.x + b.w - 4;
-        const y = b.shape === 'circle' ? b.cy - b.r * 0.45 : b.y + 4;
+        const x = b.box.x + b.box.w - 6;
+        const y = b.box.y + 6;
         return `<g class="bldg-count" data-x="${x}" data-y="${y}"><circle r="10"/><text>${counts[b.id]}</text></g>`;
       }).join('');
       apply();
@@ -313,19 +299,17 @@ window.HNY = window.HNY || {};
     function nearestBuilding(x, y) {
       let best = null;
       BUILDINGS.forEach((b) => {
-        let d;
-        if (b.shape === 'circle') d = Math.max(0, Math.hypot(x - b.cx, y - b.cy) - b.r);
-        else {
-          const dx = Math.max(b.x - x, 0, x - (b.x + b.w));
-          const dy = Math.max(b.y - y, 0, y - (b.y + b.h + b.d));
-          d = Math.hypot(dx, dy);
-        }
+        const { x: bx, y: by, w: bw, h: bh } = b.box;
+        const dx = Math.max(bx - x, 0, x - (bx + bw));
+        const dy = Math.max(by - y, 0, y - (by + bh));
+        // inside the box: prefer the building whose label anchor is closest (L and U shapes overlap boxes)
+        const d = dx || dy ? Math.hypot(dx, dy) : -1 / (1 + Math.hypot(x - b.ax, y - b.ay));
         if (!best || d < best.dist) best = { building: b, dist: d };
       });
       return best;
     }
     const insideCampus = (x, y) => {
-      try { return campusPath.isPointInFill(new DOMPoint(x, y)); } catch { return x > 60 && x < 1150 && y > 140 && y < 662; }
+      try { return campusPath.isPointInFill(new DOMPoint(x, y)); } catch { return x > 50 && x < W - 50 && y > 30 && y < H - 30; }
     };
 
     /* -- pick mode -- */
